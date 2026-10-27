@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>오늘 점심 뽑기</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8D%9A%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@400;500;700&display=swap">
+<style>
+  /* 첫 화면: 작은 창으로 여는 버튼 하나. 색과 글꼴은 점심 뽑기 앱과 같게 */
+  :root {
+    --page: #e9f5f4; --card: #ffffff; --ink: #333333; --ink-2: #777777; --line: #e6e6e6;
+    --mint: #2ac1bc; --mint-deep: #1fa8a3; --on-mint: #ffffff;
+    --display: "Jua", "Noto Sans KR", "Malgun Gothic", sans-serif;
+    --body: "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --page: #0f1a1a; --card: #212a2a; --ink: #eef3f3; --ink-2: #9aa7a7; --line: #2f3a3a; --mint-deep: #23a8a3; color-scheme: dark; }
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0; background: var(--page); color: var(--ink); font-family: var(--body);
+    display: grid; place-items: center;
+    padding: 24px max(16px, env(safe-area-inset-right, 0px)) 24px max(16px, env(safe-area-inset-left, 0px));
+  }
+  .card {
+    width: min(360px, 100%); background: var(--card); border: 1px solid var(--line); border-radius: 20px;
+    padding: 28px 22px 22px; display: flex; flex-direction: column; gap: 12px; text-align: center;
+    box-shadow: 0 24px 60px -24px rgba(31, 120, 117, .45);
+  }
+  .bowl { font-size: 44px; line-height: 1; }
+  h1 { margin: 0; font-family: var(--display); font-weight: 400; font-size: 28px; }
+  p { margin: 0; font-size: 14px; color: var(--ink-2); line-height: 1.6; }
+  .open {
+    margin-top: 6px; border: 0; border-radius: 14px; background: var(--mint); color: var(--on-mint);
+    font-family: var(--display); font-size: 20px; padding: 12px 0; cursor: pointer;
+    box-shadow: inset 0 -4px 0 var(--mint-deep);
+  }
+  .open:active { transform: translateY(2px); box-shadow: inset 0 -2px 0 var(--mint-deep); }
+  .here { font-size: 13px; color: var(--ink-2); text-underline-offset: 3px; }
+  .note { font-size: 12px; min-height: 18px; }
+  button:focus-visible, a:focus-visible { outline: 2px solid var(--mint); outline-offset: 2px; }
+</style>
+</head>
+<body>
+<main class="card">
+  <div class="bowl" aria-hidden="true">🍚</div>
+  <h1>오늘 점심 뽑기</h1>
+  <p>고를 메뉴를 담고 촤라락 돌리면<br>오늘 점심이 딱 하나로 정해져요.</p>
+  <button class="open" id="open" type="button">작은 창으로 열기</button>
+  <a class="here" href="app.html">이 창에서 바로 쓰기</a>
+  <p class="note" id="note" aria-live="polite"></p>
+</main>
+<script>
+  // 카카오톡 PC 창 정도 크기의 팝업으로 앱을 띄움
+  const W = 400, H = 680;
+  document.getElementById("open").addEventListener("click", () => {
+    const left = Math.max(0, (screen.availWidth || W) - W - 40);
+    const top = Math.max(0, Math.round(((screen.availHeight || H) - H) / 2));
+    const win = window.open("app.html", "lunch-picker", `popup=yes,width=${W},height=${H},left=${left},top=${top}`);
+    const note = document.getElementById("note");
+    if (!win) {
+      note.textContent = "브라우저가 팝업을 막았어요. 주소창 오른쪽의 팝업 차단 아이콘에서 '허용'을 누른 뒤 다시 눌러 주세요.";
+    } else {
+      win.focus();
+      note.textContent = "작은 창을 열었어요. 이 창은 닫아도 돼요.";
+    }
+  });
+</script>
+</body>
+</html>
